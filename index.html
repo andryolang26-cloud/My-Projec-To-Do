@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern To-Do List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0;
+        }
+
+        .container { 
+            background: white; width: 100%; max-width: 400px; 
+            padding: 30px; border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+
+        h3 { color: #333; margin-top: 0; font-weight: 600; text-align: center; }
+
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+
+        input { 
+            flex: 1; padding: 12px; border: 2px solid #eee; 
+            border-radius: 8px; outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: #667eea; }
+
+        button#addBtn { 
+            padding: 12px 20px; cursor: pointer; background: #667eea; 
+            color: white; border: none; border-radius: 8px; 
+            font-weight: 600; transition: 0.3s;
+        }
+        button#addBtn:hover { background: #5a67d8; transform: translateY(-2px); }
+
+        ul { list-style: none; padding: 0; }
+
+        li { 
+            background: #fff; border: 1px solid #f0f0f0; 
+            margin-bottom: 10px; padding: 12px 15px; 
+            border-radius: 8px; display: flex; justify-content: space-between; 
+            align-items: center; transition: 0.2s;
+        }
+        li:hover { box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
+
+        .delete-btn { 
+            background: #ffeded; color: #ff5c5c; border: none; 
+            padding: 5px 10px; border-radius: 5px; cursor: pointer; 
+            font-weight: bold; font-size: 12px;
+        }
+        .delete-btn:hover { background: #ff5c5c; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>My Tasks</h3>
+    <div class="input-group">
+        <input type="text" id="tugasInput" placeholder="Apa rencanamu hari ini?">
+        <button id="addBtn" onclick="tambahTugas()">Tambah</button>
+    </div>
+    <ul id="daftarList"></ul>
+</div>
+
+<script>
+    window.onload = tampilkanData;
+
+    function tambahTugas() {
+        let input = document.getElementById("tugasInput");
+        let teks = input.value;
+        if (teks === "") return;
+
+        let daftarTugas = JSON.parse(localStorage.getItem("tugas")) || [];
+        daftarTugas.push(teks);
+        localStorage.setItem("tugas", JSON.stringify(daftarTugas));
+
+        input.value = "";
+        tampilkanData();
+    }
+
+    function tampilkanData() {
+        let daftarList = document.getElementById("daftarList");
+        daftarList.innerHTML = "";
+        let daftarTugas = JSON.parse(localStorage.getItem("tugas")) || [];
+
+        daftarTugas.forEach((tugas, index) => {
+            let li = document.createElement("li");
+            li.innerHTML = `
+                <span>${tugas}</span>
+                <button class="delete-btn" onclick="hapus(${index})">Hapus</button>
+            `;
+            daftarList.appendChild(li);
+        });
+    }
+
+    function hapus(index) {
+        let daftarTugas = JSON.parse(localStorage.getItem("tugas")) || [];
+        daftarTugas.splice(index, 1);
+        localStorage.setItem("tugas", JSON.stringify(daftarTugas));
+        tampilkanData();
+    }
+</script>
+
+</body>
+</html>
