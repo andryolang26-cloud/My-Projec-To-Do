@@ -62,6 +62,166 @@
     <h3>My Tasks</h3>
     <div class="input-group">
         <input type="text" id="tugasInput" placeholder="Apa rencanamu hari ini?">
+        <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Aplikasi Data SALUT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f8;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        form input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            grid-column: span 2;
+            padding: 10px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        table th {
+            background: #2563eb;
+            color: white;
+        }
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 5px 8px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Aplikasi Data SALUT</h1>
+
+    <form id="dataForm">
+        <input type="text" id="nomor" placeholder="Nomor" required>
+        <input type="text" id="kabupaten" placeholder="Kabupaten/Kota" required>
+        <input type="text" id="namaSalut" placeholder="Nama SALUT" required>
+        <input type="text" id="pengurus" placeholder="Nama Pengurus SALUT" required>
+        <input type="text" id="nim" placeholder="NIM" required>
+        <input type="text" id="semester" placeholder="Semester" required>
+        <input type="text" id="prodi" placeholder="Prodi" required>
+        <button type="submit">Simpan Data</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nomor</th>
+                <th>Kabupaten/Kota</th>
+                <th>Nama SALUT</th>
+                <th>Nama Pengurus</th>
+                <th>NIM</th>
+                <th>Semester</th>
+                <th>Prodi</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="dataTable"></tbody>
+    </table>
+</div>
+
+<script>
+    const form = document.getElementById("dataForm");
+    const tableBody = document.getElementById("dataTable");
+
+    let dataList = JSON.parse(localStorage.getItem("dataSALUT")) || [];
+
+    function renderTable() {
+        tableBody.innerHTML = "";
+        dataList.forEach((data, index) => {
+            const row = `
+                <tr>
+                    <td>${data.nomor}</td>
+                    <td>${data.kabupaten}</td>
+                    <td>${data.namaSalut}</td>
+                    <td>${data.pengurus}</td>
+                    <td>${data.nim}</td>
+                    <td>${data.semester}</td>
+                    <td>${data.prodi}</td>
+                    <td><button class="delete-btn" onclick="deleteData(${index})">Hapus</button></td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+    }
+
+    function deleteData(index) {
+        dataList.splice(index, 1);
+        localStorage.setItem("dataSALUT", JSON.stringify(dataList));
+        renderTable();
+    }
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const data = {
+            nomor: document.getElementById("nomor").value,
+            kabupaten: document.getElementById("kabupaten").value,
+            namaSalut: document.getElementById("namaSalut").value,
+            pengurus: document.getElementById("pengurus").value,
+            nim: document.getElementById("nim").value,
+            semester: document.getElementById("semester").value,
+            prodi: document.getElementById("prodi").value,
+        };
+
+        dataList.push(data);
+        localStorage.setItem("dataSALUT", JSON.stringify(dataList));
+
+        form.reset();
+        renderTable();
+    });
+
+    renderTable();
+</script>
+
+</body>
+</html>
         <button id="addBtn" onclick="tambahTugas()">Tambah</button>
     </div>
     <ul id="daftarList"></ul>
@@ -107,4 +267,5 @@
 </script>
 
 </body>
+
 </html>
